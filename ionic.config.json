@@ -1,0 +1,7 @@
+{
+  "name": "GoaliePass",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}
