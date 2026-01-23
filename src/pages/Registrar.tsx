@@ -1,11 +1,12 @@
-import { IonButton, IonCard, IonCardContent, IonContent, IonInput, IonLoading, IonPage, IonSelect, IonSelectOption, useIonToast } from "@ionic/react";
+import { IonButton, IonContent, IonInput, IonLoading, IonPage, IonSelect, IonSelectOption, useIonRouter, useIonToast } from "@ionic/react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { formatearRut, handleRutDown, validarDigV } from '../../utils/RutFormatter';
 import moment from "moment";
-import ButtonNav from "../components/ButtonNav";
 import { useAppSelector } from "../../hooks/loginHooks";
 import httpClient from '../../hooks/CapacitorClient';
+import logo from '../../assets/images/logo.png';
+import '../../assets/Registrar.css';
 
 interface Campos {
   rut: string;
@@ -22,6 +23,7 @@ const nameIn: Campos = {
 }
 
 const Registrar: React.FC = () => {
+  const router = useIonRouter();
   const { rolesRegistro, unidades } = useAppSelector((state) => state.login);
   const [loading, setLoading] = useState<boolean>(false);
   const [fechaInicio, setFechaInicio] = useState<string>(moment().format("yyyy-MM-DDTHH:mm:ss"));
@@ -87,6 +89,10 @@ const Registrar: React.FC = () => {
     }
   }
 
+  const handleBackToLogin = () => {
+    router.push('/login', 'back', 'pop');
+  };
+
   const keyDown = (e: React.KeyboardEvent<HTMLIonInputElement>) => {
     const allowedControlKeys = [
       'Backspace',
@@ -104,44 +110,92 @@ const Registrar: React.FC = () => {
 
   return (
     <IonPage>
-      <IonContent fullscreen>
+      <IonContent fullscreen className="registrar-content">
         <IonLoading spinner={"circles"} isOpen={loading} onDidDismiss={() => setLoading(false)} />
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-          <IonCard style={{ width: '90%', maxWidth: '500px' }}>
-            <IonCardContent>
-              <IonInput label="Rut" labelPlacement="stacked" fill="outline" placeholder='Sin puntos ni guión' onKeyDown={handleRutDown} style={{ marginBottom: "10px" }}
-                {...form.register("rut", { onChange: (e) => { form.setValue('rut', formatearRut(e.target.value)) } })} autocomplete='off' />
+        
+        <div className="registrar-container">
+          {/* Logo */}
+          <div className="registrar-logo-section">
+            <img src={logo} alt="Logo" />
+          </div>
 
-              <IonInput label="Nombre" labelPlacement="stacked" fill="outline" placeholder='Nombre' style={{ marginBottom: "10px" }}
-                {...form.register("nombre")} autocomplete='off' />
+          {/* Header */}
+          <div className="registrar-header-section">
+            <h1>Registro</h1>
+            <p>Por favor ingrese sus datos para registrarse.</p>
+          </div>
 
-              <IonInput label="Correo Electrónico" labelPlacement="stacked" fill="outline" placeholder='Ej: aaa@bb.com' style={{ marginBottom: "10px" }}
-                {...form.register("correo")} autocomplete='off' />
+          {/* Form */}
+          <div className="registrar-form-section">
+            {/* Rut */}
+            <IonInput 
+              className="registrar-input-field"
+              placeholder="Rut"
+              onKeyDown={handleRutDown}
+              {...form.register("rut", { onChange: (e) => { form.setValue('rut', formatearRut(e.target.value)) } })} 
+              autocomplete='off'
+            />
 
-              <IonInput label="Teléfono" labelPlacement="stacked" fill="outline" placeholder='Ej: 9.......' style={{ marginBottom: "10px" }}
-                {...form.register("telefono")} autocomplete='off' maxlength={9} onKeyDown={(e) => { keyDown(e) }} />
+            {/* Nombre */}
+            <IonInput 
+              className="registrar-input-field"
+              placeholder="Nombre Completo"
+              {...form.register("nombre")} 
+              autocomplete='off'
+            />
 
-              <IonSelect label="Rol" placeholder="" interface="popover" fill="outline" {...form.register("rol")} style={{ marginBottom: "10px" }}>
-                {
-                  (rolesRegistro || []).map(({ value, label }) => (
-                    <IonSelectOption key={`${label}_${value}`} value={value}>{label}</IonSelectOption>
-                  ))
-                }
-              </IonSelect>
+            {/* Correo Electrónico */}
+            <IonInput 
+              className="registrar-input-field"
+              placeholder="Correo Electrónico"
+              {...form.register("correo")} 
+              autocomplete='off'
+            />
 
-              <IonSelect label="Nro. Unidad" placeholder="" interface="popover" fill="outline" {...form.register("sala")} style={{ marginBottom: "10px" }}>
-                {
-                  (unidades || []).map(({ value, label }) => (
-                    <IonSelectOption key={`${label}_${value}`} value={value}>{label}</IonSelectOption>
-                  ))
-                }
-              </IonSelect>
+            {/* Teléfono */}
+            <IonInput 
+              className="registrar-input-field"
+              placeholder="Teléfono"
+              {...form.register("telefono")} 
+              autocomplete='off'
+              maxlength={9}
+              onKeyDown={(e) => { keyDown(e) }}
+            />
 
-              <IonButton expand='block' size='small' onClick={handleButtonClick}>Ingresar</IonButton>
-            </IonCardContent>
-          </IonCard>
+            {/* Rol */}
+            <IonSelect 
+              className="registrar-select-field"
+              placeholder="Rol" 
+              interface="popover" 
+              {...form.register("rol")}
+            >
+              {
+                (rolesRegistro || []).map(({ value, label }) => (
+                  <IonSelectOption key={`${label}_${value}`} value={value}>{label}</IonSelectOption>
+                ))
+              }
+            </IonSelect>
+
+            {/* Nro. Unidad */}
+            <IonSelect 
+              className="registrar-select-field"
+              placeholder="Nro. Unidad" 
+              interface="popover" 
+              {...form.register("sala")}
+            >
+              {
+                (unidades || []).map(({ value, label }) => (
+                  <IonSelectOption key={`${label}_${value}`} value={value}>{label}</IonSelectOption>
+                ))
+              }
+            </IonSelect>
+
+            {/* Submit Button */}
+            <IonButton expand='block' className="registrar-submit-button" onClick={handleButtonClick}>
+              Ingresar
+            </IonButton>
+          </div>
         </div>
-        <ButtonNav />
       </IonContent>
     </IonPage>
   );

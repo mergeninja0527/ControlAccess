@@ -1,6 +1,6 @@
-/* Login Page - Figma Design Match */
+/* Registrar Page - Figma Design Match (Same style as Login) */
 
-ion-content.login-content::part(background) {
+ion-content.registrar-content::part(background) {
   background: linear-gradient(180deg,
     #fce4e4 0%,
     #fef6f6 15%,
@@ -8,7 +8,7 @@ ion-content.login-content::part(background) {
     #ffffff 100%);
 }
 
-.login-container {
+.registrar-container {
   display: flex;
   flex-direction: column;
   min-height: 100%;
@@ -17,25 +17,25 @@ ion-content.login-content::part(background) {
 }
 
 /* Logo Section */
-.logo-section {
+.registrar-logo-section {
   display: flex;
   justify-content: center;
-  padding-top: 100px;
-  padding-bottom: 100px;
+  padding-top: 40px;
+  padding-bottom: 24px;
 }
 
-.logo-section img {
+.registrar-logo-section img {
   width: 200px;
   height: 200px;
   object-fit: contain;
 }
 
 /* Header Section */
-.header-section {
-  margin-bottom: 24px;
+.registrar-header-section {
+  margin-bottom: 20px;
 }
 
-.header-section h1 {
+.registrar-header-section h1 {
   font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: 32px;
   font-weight: 700;
@@ -44,7 +44,7 @@ ion-content.login-content::part(background) {
   line-height: 1.2;
 }
 
-.header-section p {
+.registrar-header-section p {
   font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: 14px;
   font-weight: 400;
@@ -54,13 +54,14 @@ ion-content.login-content::part(background) {
 }
 
 /* Form Section */
-.form-section {
+.registrar-form-section {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
-.input-field {
+/* Input Fields */
+.registrar-input-field {
   --background: #ffffff;
   --border-color: #d4d4d4;
   --border-radius: 8px;
@@ -74,39 +75,36 @@ ion-content.login-content::part(background) {
   --color: #1a1a1a;
   font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: 15px;
-  min-height: 52px;
+  min-height: 50px;
   border: 1px solid #d4d4d4;
   border-radius: 8px;
 }
 
-.input-field.has-focus {
+.registrar-input-field.has-focus {
   --border-color: #3d7a8c;
   border-color: #3d7a8c;
 }
 
-/* Password input with icon */
-.password-input-wrapper {
-  position: relative;
-}
-
-.password-input-wrapper .input-field {
-  --padding-end: 48px;
-}
-
-.password-toggle-btn {
-  position: absolute;
-  right: 8px;
-  top: 50%;
-  transform: translateY(-50%);
-  --padding-start: 8px;
+/* Select Fields */
+.registrar-select-field {
+  --background: #ffffff;
+  --border-color: #d4d4d4;
+  --border-radius: 8px;
+  --padding-start: 16px;
   --padding-end: 8px;
-  --color: #6b6b6b;
-  margin: 0;
-  z-index: 10;
+  --padding-top: 12px;
+  --padding-bottom: 12px;
+  --placeholder-color: #9a9a9a;
+  --placeholder-opacity: 1;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 15px;
+  min-height: 50px;
+  border: 1px solid #d4d4d4;
+  border-radius: 8px;
 }
 
 /* Submit Button */
-.submit-button {
+.registrar-submit-button {
   --background: #2A6E90;
   --background-hover: #1b6c94;
   --background-activated: #1c5977;
@@ -123,17 +121,17 @@ ion-content.login-content::part(background) {
   height: 52px;
 }
 
-/* Forgot Password Link */
-.forgot-password-section {
+/* Back Link Section */
+.registrar-back-section {
   flex: 1;
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  padding-bottom: 70px;
-  padding-top: 32px;
+  padding-bottom: 40px;
+  padding-top: 24px;
 }
 
-.forgot-password-link {
+.registrar-back-link {
   font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: 18px;
   font-weight: 500;
@@ -145,23 +143,24 @@ ion-content.login-content::part(background) {
   padding: 8px 16px;
 }
 
-.forgot-password-link:hover {
+.registrar-back-link:hover {
   text-decoration: underline;
 }
 
-/* Remove Ionic default card styles */
-ion-card.login-card {
-  margin: 0;
-  box-shadow: none;
-  background: transparent;
-}
-
-ion-card-content.login-card-content {
-  padding: 0;
-}
-
-/* Override Ionic input styling for outline fill */
-ion-input.input-field {
+/* Override Ionic input styling */
+ion-input.registrar-input-field {
   --highlight-color-focused: #3d7a8c;
   --highlight-color-valid: #3d7a8c;
+}
+
+/* Ionic overrides */
+ion-content.registrar-content {
+  --padding-top: 0;
+  --padding-bottom: 0;
+}
+
+/* Remove default Ionic input label */
+.registrar-input-field::part(label),
+.registrar-select-field::part(label) {
+  display: none;
 }

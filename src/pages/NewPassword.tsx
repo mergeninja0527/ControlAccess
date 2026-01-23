@@ -1,9 +1,11 @@
-import { IonButton, IonCard, IonCardContent, IonContent, IonIcon, IonInput, IonLoading, IonPage, useIonRouter, useIonToast } from "@ionic/react";
+import { IonButton, IonContent, IonIcon, IonInput, IonLoading, IonPage, useIonRouter, useIonToast } from "@ionic/react";
 import { eye } from 'ionicons/icons';
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useAppSelector } from "../../hooks/loginHooks";
 import httpClient from "../../hooks/CapacitorClient";
+import logo from '../../assets/images/logo.png';
+import '../../assets/NewPassword.css';
 
 interface Campos {
   username: string;
@@ -76,6 +78,10 @@ const NewPassword: React.FC = () => {
     }
   }
 
+  const handleBackToLogin = () => {
+    router.push('/login', 'back', 'pop');
+  };
+
   useEffect(() => {
     form.setValue("username", user);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -83,27 +89,67 @@ const NewPassword: React.FC = () => {
 
   return (
     <IonPage>
-      <IonContent fullscreen>
+      <IonContent fullscreen className="newpassword-content">
         <IonLoading spinner={"circles"} isOpen={loading} onDidDismiss={() => setLoading(false)} />
-        <IonCard style={{ top: "34%", maxWidth: "30rem", margin: "auto" }}>
-          <IonCardContent>
-            <IonInput label="Nombre de Usuario" labelPlacement="stacked" fill="outline" placeholder='Usuario'
-              {...form.register("username")} autocomplete='off'></IonInput>
-            <IonInput id="txtPassword" label="Contraseña" labelPlacement="stacked" fill="outline" type={showPassword ? "text" : "password"}
-              style={{ marginTop: "10px", marginBottom: "10px" }} {...form.register("password")} autocomplete='off' placeholder='Contraseña'>
-              <IonButton fill="clear" slot="end" onClick={handleShowPassword} aria-label="Show/hide">
-                <IonIcon slot="icon-only" icon={eye} aria-hidden="true"></IonIcon>
+        
+        <div className="newpassword-container">
+          {/* Logo */}
+          <div className="newpassword-logo-section">
+            <img src={logo} alt="Logo" />
+          </div>
+
+          {/* Header */}
+          <div className="newpassword-header-section">
+            <h1>Nueva contraseña</h1>
+            <p>Ingrese sus datos para crear una nueva contraseña</p>
+          </div>
+
+          {/* Form */}
+          <div className="newpassword-form-section">
+            {/* Nombre de Usuario */}
+            <IonInput 
+              className="newpassword-input-field"
+              placeholder="Nombre de Usuario"
+              {...form.register("username")} 
+              autocomplete='off'
+            />
+
+            {/* Contraseña */}
+            <div className="newpassword-password-wrapper">
+              <IonInput 
+                id="txtPassword"
+                className="newpassword-input-field"
+                placeholder="Contraseña"
+                type={showPassword ? "text" : "password"}
+                {...form.register("password")} 
+                autocomplete='off'
+              />
+              <IonButton fill="clear" className="newpassword-toggle-btn" onClick={handleShowPassword} aria-label="Show/hide">
+                <IonIcon slot="icon-only" icon={eye} aria-hidden="true" />
               </IonButton>
-            </IonInput>
-            <IonInput id="txtPassword2" label="Confirmar contraseña" labelPlacement="stacked" fill="outline" type={showPassword2 ? "text" : "password"}
-              style={{ marginTop: "10px", marginBottom: "10px" }} {...form.register("confPassword")} autocomplete='off' placeholder='***'>
-              <IonButton fill="clear" slot="end" onClick={() => { setShowPassword2(!showPassword2) }} aria-label="Show/hide">
-                <IonIcon slot="icon-only" icon={eye} aria-hidden="true"></IonIcon>
+            </div>
+
+            {/* Confirmar Contraseña */}
+            <div className="newpassword-password-wrapper">
+              <IonInput 
+                id="txtPassword2"
+                className="newpassword-input-field"
+                placeholder="Confirmar Contraseña"
+                type={showPassword2 ? "text" : "password"}
+                {...form.register("confPassword")} 
+                autocomplete='off'
+              />
+              <IonButton fill="clear" className="newpassword-toggle-btn" onClick={() => { setShowPassword2(!showPassword2) }} aria-label="Show/hide">
+                <IonIcon slot="icon-only" icon={eye} aria-hidden="true" />
               </IonButton>
-            </IonInput>
-            <IonButton expand='block' size='small' onClick={handleButtonClick}>Ingresar</IonButton>
-          </IonCardContent>
-        </IonCard>
+            </div>
+
+            {/* Submit Button */}
+            <IonButton expand='block' className="newpassword-submit-button" onClick={handleButtonClick}>
+              Ingresar
+            </IonButton>
+          </div>
+        </div>
       </IonContent>
     </IonPage>
   );

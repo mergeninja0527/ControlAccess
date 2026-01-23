@@ -40,6 +40,7 @@ import Login from './pages/Login';
 import NewPassword from './pages/NewPassword';
 import Registrar from './pages/Registrar';
 import Visita from './pages/Visita';
+import CreateUser from './pages/CreateUser';
 
 setupIonicReact();
 
@@ -48,13 +49,21 @@ const App: React.FC = () => {
     <IonApp>
       <IonReactRouter>
         <IonRouterOutlet>
-          <ProtectedRoleRoute exact path='/home' component={Home} roles={["SAD", "ADM", "PRO", "OFC", "ENC", "RES"]} />
+          {/* <ProtectedRoleRoute exact path='/home' component={Home} roles={["SAD", "ADM", "PRO", "OFC", "ENC", "RES"]} />
           <ProtectedRoleRoute exact path="/qr" component={QRView} roles={["SAD", "ADM", "PRO", "OFC", "ENC", "RES"]} />
           <ProtectedRoleRoute exact path="/modpass" component={NewPassword} roles={["SAD", "ADM", "PRO", "OFC", "ENC", "RES"]} />
           <ProtectedRoleRoute exact path="/registry" component={Registrar} roles={["SAD", "ADM", "PRO", "ENC"]} />
-          <ProtectedRoleRoute exact path="/visit" component={Visita} roles={["SAD", "ADM", "PRO", "ENC", "RES"]} />
+          <ProtectedRoleRoute exact path="/visit" component={Visita} roles={["SAD", "ADM", "PRO", "ENC", "RES"]} /> */}
+
+          <Route exact path='/home' component={Home} />
+          <Route exact path="/qr" component={QRView} />
+          <Route exact path="/modpass" component={NewPassword} />
+          <Route exact path="/registry" component={Registrar} />
+          <Route exact path="/visit" component={Visita} />
+          <Route exact path="/createuser" component={CreateUser} />
           <Route exact path="/login" component={Login} />
-          <Redirect exact from="/" to="/login" />
+          {/* Change to "/login" when backend is ready */}
+          <Redirect exact from="/" to="/home" />
         </IonRouterOutlet>
       </IonReactRouter>
     </IonApp>

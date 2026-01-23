@@ -1,0 +1,351 @@
+/* Visita Page - Figma Design Match */
+
+/* Main container */
+ion-content.visita-content::part(background) {
+  background: #ffffff;
+}
+
+.visita-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Header with back button */
+.visita-header {
+  display: flex;
+  align-items: center;
+  padding: 16px 20px;
+  background: #ffffff;
+}
+
+.back-button {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px 0;
+  color: #2A6E90;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.back-button ion-icon {
+  font-size: 20px;
+}
+
+.back-button:active {
+  opacity: 0.7;
+}
+
+/* Content area */
+.visita-content-area {
+  flex: 1;
+  padding: 0 20px 24px 20px;
+}
+
+/* Title */
+.visita-title {
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 16px 0;
+}
+
+/* Step Indicator */
+.step-indicator {
+  margin-bottom: 24px;
+}
+
+.step-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.step-label {
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: #1a1a1a;
+}
+
+.step-label.inactive {
+  color: #9a9a9a;
+}
+
+.step-progress-bar {
+  display: flex;
+  gap: 4px;
+  height: 4px;
+}
+
+.step-progress-segment {
+  flex: 1;
+  background: #e0e0e0;
+  border-radius: 2px;
+}
+
+.step-progress-segment.active {
+  background: #2A6E90;
+}
+
+/* Form Section */
+.visita-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Input Fields */
+.visita-input {
+  --background: #ffffff;
+  --border-color: #d4d4d4;
+  --border-radius: 8px;
+  --border-width: 1px;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --padding-top: 14px;
+  --padding-bottom: 14px;
+  --placeholder-color: #9a9a9a;
+  --placeholder-opacity: 1;
+  --color: #1a1a1a;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 15px;
+  min-height: 50px;
+  border: 1px solid #d4d4d4;
+  border-radius: 8px;
+}
+
+.visita-input.has-focus {
+  --border-color: #2A6E90;
+  border-color: #2A6E90;
+}
+
+/* Select Fields */
+.visita-select {
+  --background: #ffffff;
+  --border-color: #d4d4d4;
+  --border-radius: 8px;
+  --padding-start: 16px;
+  --padding-end: 8px;
+  --padding-top: 14px;
+  --padding-bottom: 14px;
+  --placeholder-color: #9a9a9a;
+  --placeholder-opacity: 1;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 15px;
+  min-height: 50px;
+  border: 1px solid #d4d4d4;
+  border-radius: 8px;
+}
+
+/* Row with two fields */
+.form-row {
+  display: flex;
+  gap: 12px;
+}
+
+.form-row > * {
+  flex: 1;
+}
+
+/* Date Input with Icon */
+.date-input-wrapper {
+  position: relative;
+}
+
+.date-input-wrapper .visita-input {
+  --padding-end: 40px;
+}
+
+.date-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 18px;
+  color: #9a9a9a;
+  pointer-events: none;
+}
+
+/* Textarea */
+.visita-textarea {
+  --background: #ffffff;
+  --border-color: #d4d4d4;
+  --border-radius: 8px;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --padding-top: 14px;
+  --padding-bottom: 14px;
+  --placeholder-color: #9a9a9a;
+  --placeholder-opacity: 1;
+  --color: #1a1a1a;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 15px;
+  min-height: 100px;
+  border: 1px solid #d4d4d4;
+  border-radius: 8px;
+}
+
+.visita-textarea.has-focus {
+  --border-color: #2A6E90;
+  border-color: #2A6E90;
+}
+
+/* Submit Button */
+.visita-submit-button {
+  --background: #2A6E90;
+  --background-hover: #1b6c94;
+  --background-activated: #1c5977;
+  --border-radius: 8px;
+  --box-shadow: none;
+  --padding-top: 16px;
+  --padding-bottom: 16px;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0;
+  margin-top: 12px;
+  height: 52px;
+}
+
+/* Ionic overrides */
+ion-content.visita-content {
+  --padding-top: 0;
+  --padding-bottom: 0;
+}
+
+/* Remove default Ionic input label */
+.visita-input::part(label),
+.visita-select::part(label),
+.visita-textarea::part(label) {
+  display: none;
+}
+
+/* Modal styling */
+ion-modal.date-modal {
+  --width: 90%;
+  --max-width: 400px;
+  --height: auto;
+  --border-radius: 16px;
+}
+
+ion-modal.date-modal ion-datetime {
+  --background: #ffffff;
+}
+
+/* ========================================
+   STEP 2 - QR Code Sharing View
+   ======================================== */
+
+.qr-share-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20px;
+}
+
+/* QR Code Container */
+.qr-code-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.qr-code-container img {
+  width: 200px;
+  height: 200px;
+  object-fit: contain;
+}
+
+/* Share Buttons Row */
+.share-buttons-row {
+  display: flex;
+  gap: 16px;
+  width: 100%;
+  max-width: 280px;
+  margin-bottom: 32px;
+}
+
+.share-button {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  border: 1px solid #d4d4d4;
+  border-radius: 8px;
+  padding: 16px 24px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.share-button:hover {
+  border-color: #2A6E90;
+  box-shadow: 0 2px 8px rgba(42, 110, 144, 0.15);
+}
+
+.share-button:active {
+  transform: scale(0.98);
+  background: #f8f8f8;
+}
+
+.share-button ion-icon {
+  font-size: 24px;
+  color: #4a4a4a;
+}
+
+.share-button.whatsapp ion-icon {
+  color: #25D366;
+}
+
+.share-button.email ion-icon {
+  color: #4a4a4a;
+}
+
+/* Download QR Link */
+.download-qr-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 12px 24px;
+  color: #2A6E90;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.download-qr-link ion-icon {
+  font-size: 20px;
+}
+
+.download-qr-link:hover {
+  text-decoration: underline;
+}
+
+.download-qr-link:active {
+  opacity: 0.7;
+}
+
+/* Step label clickable */
+.step-label.clickable {
+  cursor: pointer;
+}
+
+.step-label.clickable:hover {
+  text-decoration: underline;
+}

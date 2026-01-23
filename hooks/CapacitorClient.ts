@@ -15,7 +15,7 @@ import { CapacitorHttp, HttpResponse } from '@capacitor/core';
  */
 const getBaseURL = (): string => {
   // VITE_API_URL is set in .env.development, .env.qa, or .env.production
-  const apiUrl = import.meta.env.VITE_API_URL;
+  const apiUrl = import.meta.env.VITE_API_URL_DEV;
   
   if (apiUrl) {
     console.log(`[API] Mode: ${import.meta.env.MODE}, URL: ${apiUrl}`);

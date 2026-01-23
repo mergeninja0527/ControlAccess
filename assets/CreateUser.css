@@ -1,0 +1,189 @@
+/* CreateUser Page - Figma Design Match */
+
+/* Main container */
+ion-content.createuser-content::part(background) {
+  background: #ffffff;
+}
+
+.createuser-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Header with back button */
+.createuser-header {
+  display: flex;
+  align-items: center;
+  padding: 16px 20px;
+  background: #ffffff;
+}
+
+.createuser-back-button {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px 0;
+  color: #2A6E90;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.createuser-back-button ion-icon {
+  font-size: 20px;
+}
+
+.createuser-back-button:active {
+  opacity: 0.7;
+}
+
+/* Content area */
+.createuser-content-area {
+  flex: 1;
+  padding: 0 20px 24px 20px;
+}
+
+/* Title */
+.createuser-title {
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 4px 0;
+}
+
+/* Subtitle */
+.createuser-subtitle {
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #6b6b6b;
+  margin: 0 0 24px 0;
+}
+
+/* Form Section */
+.createuser-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Input Fields */
+.createuser-input {
+  --background: #ffffff;
+  --border-color: #d4d4d4;
+  --border-radius: 8px;
+  --border-width: 1px;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --padding-top: 14px;
+  --padding-bottom: 14px;
+  --placeholder-color: #9a9a9a;
+  --placeholder-opacity: 1;
+  --color: #1a1a1a;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 15px;
+  min-height: 50px;
+  border: 1px solid #d4d4d4;
+  border-radius: 8px;
+}
+
+.createuser-input.has-focus {
+  --border-color: #2A6E90;
+  border-color: #2A6E90;
+}
+
+/* Select Fields */
+.createuser-select {
+  --background: #ffffff;
+  --border-color: #d4d4d4;
+  --border-radius: 8px;
+  --padding-start: 16px;
+  --padding-end: 8px;
+  --padding-top: 14px;
+  --padding-bottom: 14px;
+  --placeholder-color: #9a9a9a;
+  --placeholder-opacity: 1;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 15px;
+  min-height: 50px;
+  border: 1px solid #d4d4d4;
+  border-radius: 8px;
+}
+
+/* Row with two fields */
+.createuser-form-row {
+  display: flex;
+  gap: 12px;
+}
+
+.createuser-form-row > * {
+  flex: 1;
+}
+
+/* Date Input with Icon */
+.createuser-date-wrapper {
+  position: relative;
+}
+
+.createuser-date-wrapper .createuser-input {
+  --padding-end: 40px;
+}
+
+.createuser-date-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 18px;
+  color: #9a9a9a;
+  pointer-events: none;
+}
+
+/* Submit Button */
+.createuser-submit-button {
+  --background: #2A6E90;
+  --background-hover: #1b6c94;
+  --background-activated: #1c5977;
+  --border-radius: 8px;
+  --box-shadow: none;
+  --padding-top: 16px;
+  --padding-bottom: 16px;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0;
+  margin-top: 12px;
+  height: 52px;
+}
+
+/* Ionic overrides */
+ion-content.createuser-content {
+  --padding-top: 0;
+  --padding-bottom: 0;
+}
+
+/* Remove default Ionic input label */
+.createuser-input::part(label),
+.createuser-select::part(label) {
+  display: none;
+}
+
+/* Modal styling */
+ion-modal.createuser-date-modal {
+  --width: 90%;
+  --max-width: 400px;
+  --height: auto;
+  --border-radius: 16px;
+}
+
+ion-modal.createuser-date-modal ion-datetime {
+  --background: #ffffff;
+}

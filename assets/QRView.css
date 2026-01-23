@@ -1,0 +1,152 @@
+/* QRView Page - Figma Design Match */
+
+/* Main container */
+ion-content.qrview-content::part(background) {
+  background: #ffffff;
+}
+
+.qrview-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Header with back button */
+.qrview-header {
+  display: flex;
+  align-items: center;
+  padding: 16px 20px;
+  background: #ffffff;
+}
+
+.qrview-back-button {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px 0;
+  color: #2A6E90;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.qrview-back-button ion-icon {
+  font-size: 20px;
+}
+
+.qrview-back-button:active {
+  opacity: 0.7;
+}
+
+/* Content area */
+.qrview-content-area {
+  flex: 1;
+  padding: 0 20px 24px 20px;
+}
+
+/* Title */
+.qrview-title {
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 4px 0;
+}
+
+/* Subtitle */
+.qrview-subtitle {
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #6b6b6b;
+  margin: 0 0 24px 0;
+}
+
+/* QR Section */
+.qrview-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* QR Code Container */
+.qrview-qr-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  margin-bottom: 24px;
+}
+
+.qrview-qr-container img {
+  width: 180px;
+  height: 180px;
+  object-fit: contain;
+}
+
+/* User Info */
+.qrview-user-name {
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 12px 0;
+  text-align: center;
+}
+
+/* Date Info */
+.qrview-date-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 32px;
+}
+
+.qrview-date-text {
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #9a9a9a;
+  margin: 0;
+  text-align: center;
+}
+
+/* Download QR Link */
+.qrview-download-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 12px 24px;
+  color: #2A6E90;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.qrview-download-link ion-icon {
+  font-size: 20px;
+}
+
+.qrview-download-link:hover {
+  text-decoration: underline;
+}
+
+.qrview-download-link:active {
+  opacity: 0.7;
+}
+
+/* Ionic overrides */
+ion-content.qrview-content {
+  --padding-top: 0;
+  --padding-bottom: 0;
+}
