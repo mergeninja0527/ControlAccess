@@ -1,8 +1,9 @@
-import { IonButton, IonContent, IonInput, IonLoading, IonPage, IonSelect, IonSelectOption, useIonRouter, useIonToast } from "@ionic/react";
+import { IonButton, IonContent, IonIcon, IonInput, IonLoading, IonPage, IonSelect, IonSelectOption, useIonRouter, useIonToast } from "@ionic/react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { formatearRut, handleRutDown, validarDigV } from '../../utils/RutFormatter';
 import moment from "moment";
+import { chevronDown } from "ionicons/icons";
 import { useAppSelector } from "../../hooks/loginHooks";
 import httpClient from '../../hooks/CapacitorClient';
 import logo from '../../assets/images/logo.png';
@@ -167,6 +168,7 @@ const Registrar: React.FC = () => {
               className="registrar-select-field"
               placeholder="Rol" 
               interface="popover" 
+              toggleIcon={chevronDown}
               {...form.register("rol")}
             >
               {
@@ -181,6 +183,7 @@ const Registrar: React.FC = () => {
               className="registrar-select-field"
               placeholder="Nro. Unidad" 
               interface="popover" 
+              toggleIcon={chevronDown}
               {...form.register("sala")}
             >
               {

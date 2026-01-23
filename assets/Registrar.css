@@ -91,7 +91,7 @@ ion-content.registrar-content::part(background) {
   --border-color: #d4d4d4;
   --border-radius: 8px;
   --padding-start: 16px;
-  --padding-end: 8px;
+  --padding-end: 36px;
   --padding-top: 12px;
   --padding-bottom: 12px;
   --placeholder-color: #9a9a9a;
@@ -101,6 +101,16 @@ ion-content.registrar-content::part(background) {
   min-height: 50px;
   border: 1px solid #d4d4d4;
   border-radius: 8px;
+  position: relative;
+}
+
+/* Custom dropdown arrow for select */
+.registrar-select-field::part(icon) {
+  color: #9a9a9a;
+  opacity: 1;
+  font-size: 14px;
+  position: absolute;
+  right: 12px;
 }
 
 /* Submit Button */

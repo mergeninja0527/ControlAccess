@@ -17,7 +17,7 @@ import { useRef, useState } from "react";
 import { formatearRut, handleRutDown, validarDigV } from "../../utils/RutFormatter";
 import { useForm } from "react-hook-form";
 import moment from "moment";
-import { arrowBack, calendarOutline, logoWhatsapp, mailOutline, downloadOutline } from "ionicons/icons";
+import { arrowBack, calendarOutline, logoWhatsapp, mailOutline, downloadOutline, chevronDown } from "ionicons/icons";
 import { useAppSelector } from "../../hooks/loginHooks";
 import httpClient from "../../hooks/CapacitorClient";
 import qrCodeImage from '../../assets/images/QR_code.png';
@@ -249,6 +249,7 @@ const Visita: React.FC = () => {
                     className="visita-select"
                     placeholder="Rol"
                     interface="popover"
+                    toggleIcon={chevronDown}
                     {...form.register("rol")}
                   >
                     <IonSelectOption value="VIS">Visita</IonSelectOption>
@@ -260,6 +261,7 @@ const Visita: React.FC = () => {
                     className="visita-select"
                     placeholder="Nº de Unidad"
                     interface="popover"
+                    toggleIcon={chevronDown}
                     {...form.register("nroUnidad")}
                   >
                     {(unidades || []).map(({ value, label }) => (
