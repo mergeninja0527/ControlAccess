@@ -1,5 +1,5 @@
 import { IonContent, IonIcon, IonPage, useIonRouter } from '@ionic/react';
-import { qrCodeOutline, peopleOutline, mailOutline, logOutOutline } from 'ionicons/icons';
+import { qrCodeOutline, personAddOutline, mailOutline, logOutOutline } from 'ionicons/icons';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../reducers/store';
 import { handleLogout } from '../../reducers/loginThunks';
@@ -56,7 +56,7 @@ const Home: React.FC = () => {
 
             {/* Crear Usuario Card */}
             <button className="menu-card" onClick={() => navigateTo('/createuser')}>
-              <IonIcon icon={peopleOutline} className="menu-card-icon" />
+              <IonIcon icon={personAddOutline} className="menu-card-icon" />
               <span className="menu-card-label">Crear Usuario</span>
             </button>
 

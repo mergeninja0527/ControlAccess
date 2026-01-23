@@ -63,7 +63,7 @@ const App: React.FC = () => {
           <Route exact path="/createuser" component={CreateUser} />
           <Route exact path="/login" component={Login} />
           {/* Change to "/login" when backend is ready */}
-          <Redirect exact from="/" to="/registry" />
+          <Redirect exact from="/" to="/home" />
         </IonRouterOutlet>
       </IonReactRouter>
     </IonApp>
