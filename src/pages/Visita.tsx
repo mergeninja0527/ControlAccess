@@ -32,9 +32,16 @@ interface Campos {
 
 const Visita: React.FC = () => {
   const router = useIonRouter();
-  const { unidades } = useAppSelector((state) => state.login);
+  const { user, unidades } = useAppSelector((state) => state.login);
+  
+  // Debug: Log unidades when component loads
+  console.log('[Visita] User:', user);
+  console.log('[Visita] Unidades from Redux:', unidades);
+  console.log('[Visita] Unidades count:', unidades?.length ?? 'undefined');
   const [loading, setLoading] = useState<boolean>(false);
   const [currentStep, setCurrentStep] = useState<number>(1);
+  const [generatedQR, setGeneratedQR] = useState<string>('');
+  const [invitationData, setInvitationData] = useState<{nombre: string, fechaFin: string} | null>(null);
   const form = useForm();
   const modalInicio = useRef<HTMLIonModalElement>(null);
   const modalFin = useRef<HTMLIonModalElement>(null);
@@ -113,21 +120,45 @@ const Visita: React.FC = () => {
         setLoading(true);
         const fi = moment(fechaInicio).format("yyyy-MM-DD HH:mm:ss");
         const ff = moment(fechaFin).format("yyyy-MM-DD HH:mm:ss");
-        const response = await httpClient.post('/mobile/visita', { ...form.getValues(), fechaInicio: fi, fechaFin: ff });
-        if (response.status === 403) return showToast(response.data.message, "danger");
+        const formValues = form.getValues();
+        const normalizedUser = user?.replace(/\./g, '') || '';
+        
+        // Use new invitations API
+        const response = await httpClient.post('/invitations', {
+          createdBy: normalizedUser,
+          nombreInvitado: formValues.name,
+          rutInvitado: formValues.rut?.replace(/\./g, ''),
+          correoInvitado: formValues.email,
+          telefonoInvitado: formValues.telefono,
+          motivo: formValues.motivo,
+          fechaInicio: fi,
+          fechaFin: ff,
+          idSala: formValues.nroUnidad,
+          usageLimit: 1
+        });
+        
+        console.log('[Visita] Response:', response);
+        
+        if (response.status === 403) return showToast(response.data?.message || 'Error', "danger");
+
+        if (response.data?.success && response.data?.data?.qrCode) {
+          setGeneratedQR(response.data.data.qrCode);
+          setInvitationData({
+            nombre: formValues.name,
+            fechaFin: ff
+          });
+        }
 
         showToast("Invitación generada correctamente.", "success");
         setCurrentStep(2);
-      } catch {
-        // For demo purposes, go to step 2 even if API fails
-        setCurrentStep(2);
-        // showToast("Ocurrió algún error al crear la invitación.", "danger");
+      } catch (error) {
+        console.error('[Visita] Error:', error);
+        showToast("Ocurrió algún error al crear la invitación.", "danger");
       } finally {
         setLoading(false);
       }
     } else {
-      // For demo/testing, allow going to step 2 without validation
-      setCurrentStep(2);
+      showToast("Por favor complete todos los campos.", "warning");
     }
   };
 
@@ -346,8 +377,18 @@ const Visita: React.FC = () => {
               <div className="qr-share-section">
                 {/* QR Code */}
                 <div className="qr-code-container">
-                  <img src={qrCodeImage} alt="QR Code" />
+                  <img src={generatedQR || qrCodeImage} alt="QR Code" />
                 </div>
+
+                {/* Invitation Info */}
+                {invitationData && (
+                  <div className="invitation-info">
+                    <p className="invitation-name">{invitationData.nombre}</p>
+                    <p className="invitation-validity">
+                      Válido hasta: {moment(invitationData.fechaFin).format('DD/MM/YYYY HH:mm')}
+                    </p>
+                  </div>
+                )}
 
                 {/* Share Buttons */}
                 <div className="share-buttons-row">
@@ -363,6 +404,14 @@ const Visita: React.FC = () => {
                 <button className="download-qr-link" onClick={handleDownloadQR}>
                   <IonIcon icon={downloadOutline} />
                   <span>Descargar QR</span>
+                </button>
+
+                {/* View All Invitations */}
+                <button 
+                  className="view-invitations-link" 
+                  onClick={() => router.push('/invitations', 'forward', 'push')}
+                >
+                  Ver todas mis invitaciones
                 </button>
               </div>
             )}

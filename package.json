@@ -19,7 +19,7 @@
     "cap:ios": "npx cap open ios"
   },
   "dependencies": {
-    "@capacitor/android": "7.2.0",
+    "@capacitor/android": "^7.4.5",
     "@capacitor/app": "7.0.1",
     "@capacitor/core": "^7.2.0",
     "@capacitor/haptics": "7.0.1",

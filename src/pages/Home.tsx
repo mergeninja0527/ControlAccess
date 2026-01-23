@@ -1,5 +1,5 @@
 import { IonContent, IonIcon, IonPage, useIonRouter } from '@ionic/react';
-import { qrCodeOutline, personAddOutline, mailOutline, logOutOutline } from 'ionicons/icons';
+import { qrCodeOutline, personAddOutline, mailOutline, logOutOutline, listOutline } from 'ionicons/icons';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../reducers/store';
 import { handleLogout } from '../../reducers/loginThunks';
@@ -64,6 +64,12 @@ const Home: React.FC = () => {
             <button className="menu-card" onClick={() => navigateTo('/visit')}>
               <IonIcon icon={mailOutline} className="menu-card-icon" />
               <span className="menu-card-label">Invitar</span>
+            </button>
+
+            {/* Mis Invitaciones Card */}
+            <button className="menu-card" onClick={() => navigateTo('/invitations')}>
+              <IonIcon icon={listOutline} className="menu-card-icon" />
+              <span className="menu-card-label">Mis Invitaciones</span>
             </button>
           </div>
 

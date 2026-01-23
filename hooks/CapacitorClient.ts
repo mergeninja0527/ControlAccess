@@ -15,10 +15,13 @@ import { CapacitorHttp, HttpResponse } from '@capacitor/core';
  */
 const getBaseURL = (): string => {
   // VITE_API_URL is set in .env.development, .env.qa, or .env.production
-  const apiUrl = import.meta.env.VITE_API_URL_DEV;
+  const apiUrl = import.meta.env.VITE_API_URL;
+  
+  console.log(`[API Config] Mode: ${import.meta.env.MODE}`);
+  console.log(`[API Config] VITE_API_URL: ${apiUrl}`);
   
   if (apiUrl) {
-    console.log(`[API] Mode: ${import.meta.env.MODE}, URL: ${apiUrl}`);
+    console.log(`[API] Using configured URL: ${apiUrl}`);
     return apiUrl;
   }
   
@@ -95,17 +98,24 @@ class HttpClient {
   async post<T = HttpResponse>(endpoint: string, data: Record<string, unknown> = {}, options: {
     headers?: Record<string, string>;
   } = {}): Promise<T> {
+    const url = this.buildUrl(endpoint);
+    console.log(`[HTTP POST] ${url}`);
+    console.log(`[HTTP POST] Data:`, JSON.stringify(data));
+    
     try {
       const response = await CapacitorHttp.post({
-        url: this.buildUrl(endpoint),
+        url: url,
         headers: this.mergeHeaders(options.headers),
         data: data,
         ...defaultOptions,
       });
 
+      console.log(`[HTTP POST] Response Status: ${response.status}`);
+      console.log(`[HTTP POST] Response Data:`, JSON.stringify(response.data));
+      
       return response as T;
     } catch (error) {
-      console.error('POST Error:', error);
+      console.error('[HTTP POST] Error:', error);
       throw error;
     }
   }

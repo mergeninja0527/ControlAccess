@@ -27,26 +27,39 @@ const Login: React.FC = () => {
   };
 
   const handleButtonClick = async () => {
+    const formData = loginForm.getValues();
+    console.log('[Login] Starting login attempt...');
+    console.log('[Login] Form data:', JSON.stringify(formData));
+    
     try {
       setLoading(true);
-      const response = await httpClient.post('/mobile/auth/login', loginForm.getValues());
+      const response = await httpClient.post('/mobile/auth/login', formData);
 
-      if (response.status === 403) return showToast(response.data?.message, "danger");
+      console.log('[Login] Response received:', JSON.stringify(response));
+      console.log('[Login] Response status:', response.status);
+      console.log('[Login] Response data:', JSON.stringify(response.data));
 
-      const { username, userrol, passTemp, roles, unidades } = response.data
+      if (response.status === 403) {
+        console.log('[Login] 403 Forbidden - ', response.data?.message);
+        return showToast(response.data?.message || "Acceso denegado", "danger");
+      }
+
+      const { username, userrol, passTemp, roles, unidades } = response.data;
+      console.log('[Login] Parsed data - username:', username, 'userrol:', userrol, 'passTemp:', passTemp);
 
       if (passTemp === 1) {
-        dispatch(handleLoginSuccess(loginForm.getValues("username"), username, userrol, roles, unidades))
+        dispatch(handleLoginSuccess(formData.username, username, userrol, roles, unidades))
         showToast("Inicio Sesión exitoso, debe modificar su contraseña.")
         return router.push('/modpass', 'root', 'replace')
       }
 
       showToast("Inicio Sesión exitoso")
-      dispatch(handleLoginSuccess(loginForm.getValues("username"), username, userrol, roles, unidades))
+      dispatch(handleLoginSuccess(formData.username, username, userrol, roles, unidades))
       setTimeout(() => {
         router.push('/home', 'root', 'replace')
       }, 500)
-    } catch {
+    } catch (error) {
+      console.error('[Login] Error:', error);
       showToast("Error al iniciar sesión.", "danger");
     } finally {
       setLoading(false);

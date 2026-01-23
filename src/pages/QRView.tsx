@@ -63,7 +63,7 @@ const QRView: React.FC = () => {
   };
 
   useEffect(() => {
-    if (effectRan.current === true || process.env.NODE_ENV !== 'development') {
+    if (effectRan.current === true || !import.meta.env.DEV) {
       getQRImage();
       const intervalId = setInterval(() => {
         getQRImage();

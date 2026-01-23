@@ -1,0 +1,272 @@
+.invitation-list-content {
+  --background: #f5f5f5;
+}
+
+.invitation-list-container {
+  padding: 20px;
+  min-height: 100%;
+}
+
+.invitation-list-header {
+  margin-bottom: 20px;
+}
+
+.invitation-back-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  color: #2d6a9f;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 8px 0;
+}
+
+.invitation-back-button ion-icon {
+  font-size: 20px;
+}
+
+.invitation-list-title {
+  font-size: 28px;
+  font-weight: bold;
+  color: #333;
+  margin: 0 0 8px 0;
+}
+
+.invitation-list-subtitle {
+  font-size: 14px;
+  color: #666;
+  margin: 0 0 24px 0;
+}
+
+.invitation-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.invitation-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: #666;
+}
+
+.invitation-empty p {
+  margin-bottom: 20px;
+}
+
+.invitation-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.invitation-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid #eee;
+}
+
+.invitation-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+}
+
+.invitation-status {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.invitation-status ion-icon {
+  font-size: 14px;
+}
+
+.status-active {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.status-pending {
+  background: #fff3e0;
+  color: #f57c00;
+}
+
+.status-expired {
+  background: #fbe9e7;
+  color: #d84315;
+}
+
+.status-cancelled {
+  background: #ffebee;
+  color: #c62828;
+}
+
+.status-used {
+  background: #e3f2fd;
+  color: #1565c0;
+}
+
+.invitation-card-body {
+  padding: 16px;
+}
+
+.invitation-detail {
+  display: flex;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.invitation-detail:last-child {
+  margin-bottom: 0;
+}
+
+.invitation-detail .label {
+  color: #666;
+  min-width: 80px;
+  flex-shrink: 0;
+}
+
+.invitation-detail .value {
+  color: #333;
+  flex: 1;
+}
+
+.invitation-card-actions {
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px;
+  background: #fafafa;
+  border-top: 1px solid #eee;
+}
+
+.invitation-action-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.invitation-action-btn ion-icon {
+  font-size: 18px;
+}
+
+.qr-btn {
+  background: #2d6a9f;
+  color: white;
+}
+
+.qr-btn:hover {
+  background: #245a87;
+}
+
+.qr-btn.disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.cancel-btn {
+  background: #fff;
+  color: #c62828;
+  border: 1px solid #c62828;
+}
+
+.cancel-btn:hover {
+  background: #ffebee;
+}
+
+/* QR Modal */
+.qr-modal-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: white;
+}
+
+.qr-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.qr-modal-header h2 {
+  margin: 0;
+  font-size: 20px;
+  color: #333;
+}
+
+.qr-modal-header button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.qr-modal-header button ion-icon {
+  font-size: 28px;
+  color: #666;
+}
+
+.qr-modal-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.qr-image-container {
+  width: 280px;
+  height: 280px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.qr-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.qr-name {
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 8px 0;
+}
+
+.qr-validity {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 400px) {
+  .invitation-card-actions {
+    flex-direction: column;
+  }
+}
