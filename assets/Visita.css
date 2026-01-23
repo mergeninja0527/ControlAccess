@@ -47,7 +47,7 @@ ion-content.visita-content::part(background) {
 /* Content area */
 .visita-content-area {
   flex: 1;
-  padding: 0 20px 24px 20px;
+  padding: 30px 20px 24px 20px;
 }
 
 /* Title */
@@ -264,8 +264,8 @@ ion-modal.date-modal ion-datetime {
 }
 
 .qr-code-container img {
-  width: 200px;
-  height: 200px;
+  width: 350px;
+  height: 350px;
   object-fit: contain;
 }
 
@@ -347,6 +347,4 @@ ion-modal.date-modal ion-datetime {
   cursor: pointer;
 }
 
-.step-label.clickable:hover {
-  text-decoration: underline;
-}
+
