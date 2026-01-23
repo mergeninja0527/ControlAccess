@@ -16,7 +16,7 @@ import { useRef, useState } from "react";
 import { formatearRut, handleRutDown, validarDigV } from "../../utils/RutFormatter";
 import { useForm } from "react-hook-form";
 import moment from "moment";
-import { arrowBack, calendarOutline } from "ionicons/icons";
+import { arrowBack, calendarOutline, chevronDown } from "ionicons/icons";
 import { useAppSelector } from "../../hooks/loginHooks";
 import httpClient from "../../hooks/CapacitorClient";
 import '../../assets/CreateUser.css';
@@ -203,6 +203,7 @@ const CreateUser: React.FC = () => {
                   className="createuser-select"
                   placeholder="Rol"
                   interface="popover"
+                  toggleIcon={chevronDown}
                   {...form.register("rol")}
                 >
                   <IonSelectOption value="ADM">Administrador</IonSelectOption>
@@ -215,6 +216,7 @@ const CreateUser: React.FC = () => {
                   className="createuser-select"
                   placeholder="Nº de Unidad"
                   interface="popover"
+                  toggleIcon={chevronDown}
                   {...form.register("nroUnidad")}
                 >
                   {(unidades || []).map(({ value, label }) => (

@@ -47,7 +47,7 @@ ion-content.visita-content::part(background) {
 /* Content area */
 .visita-content-area {
   flex: 1;
-  padding: 30px 20px 24px 20px;
+  padding: 60px 20px 24px 20px;
 }
 
 /* Title */
@@ -135,7 +135,7 @@ ion-content.visita-content::part(background) {
   --border-color: #d4d4d4;
   --border-radius: 8px;
   --padding-start: 16px;
-  --padding-end: 8px;
+  --padding-end: 36px;
   --padding-top: 14px;
   --padding-bottom: 14px;
   --placeholder-color: #9a9a9a;
@@ -145,6 +145,21 @@ ion-content.visita-content::part(background) {
   min-height: 50px;
   border: 1px solid #d4d4d4;
   border-radius: 8px;
+  position: relative;
+}
+
+/* Custom dropdown arrow for select */
+.visita-select::part(icon) {
+  color: #9a9a9a;
+  opacity: 1;
+  font-size: 14px;
+  position: absolute;
+  right: 12px;
+}
+
+/* Override Ionic select icon to chevron-down style */
+.form-row .visita-select {
+  --padding-end: 36px;
 }
 
 /* Row with two fields */
@@ -306,9 +321,9 @@ ion-modal.date-modal ion-datetime {
   color: #4a4a4a;
 }
 
-.share-button.whatsapp ion-icon {
+/* .share-button.whatsapp ion-icon {
   color: #25D366;
-}
+} */
 
 .share-button.email ion-icon {
   color: #4a4a4a;
