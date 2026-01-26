@@ -4,13 +4,19 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../reducers/store';
 import { handleLogout } from '../../reducers/loginThunks';
 import { useAppSelector } from '../../hooks/loginHooks';
+import { hasRole } from '../../ProtectedRoleRoute';
 import logo from '../../assets/images/logo.png';
 import '../../assets/Home.css';
 
 const Home: React.FC = () => {
   const router = useIonRouter();
   const dispatch = useDispatch<AppDispatch>();
-  const { username } = useAppSelector((state) => state.login);
+  const { username, userrol } = useAppSelector((state) => state.login);
+  
+  // Define which roles can access each feature
+  const canCreateUser = hasRole(userrol, ["SAD", "ADM", "SUP", "PRO", "ENC"]);
+  const canInvite = hasRole(userrol, ["SAD", "ADM", "SUP", "USR", "PRO", "ENC", "RES"]);
+  const canViewInvitations = hasRole(userrol, ["SAD", "ADM", "SUP", "USR", "PRO", "ENC", "RES"]);
 
   const handleLogoutClick = () => {
     dispatch(handleLogout());
@@ -48,29 +54,35 @@ const Home: React.FC = () => {
 
           {/* Menu Cards */}
           <div className="menu-cards-section">
-            {/* QR Card */}
+            {/* QR Card - Available to all logged-in users */}
             <button className="menu-card" onClick={() => navigateTo('/qr')}>
               <IonIcon icon={qrCodeOutline} className="menu-card-icon" />
               <span className="menu-card-label">QR</span>
             </button>
 
-            {/* Crear Usuario Card */}
-            <button className="menu-card" onClick={() => navigateTo('/createuser')}>
-              <IonIcon icon={personAddOutline} className="menu-card-icon" />
-              <span className="menu-card-label">Crear Usuario</span>
-            </button>
+            {/* Crear Usuario Card - Only for administrators/managers */}
+            {canCreateUser && (
+              <button className="menu-card" onClick={() => navigateTo('/createuser')}>
+                <IonIcon icon={personAddOutline} className="menu-card-icon" />
+                <span className="menu-card-label">Crear Usuario</span>
+              </button>
+            )}
 
-            {/* Invitar Card */}
-            <button className="menu-card" onClick={() => navigateTo('/visit')}>
-              <IonIcon icon={mailOutline} className="menu-card-icon" />
-              <span className="menu-card-label">Invitar</span>
-            </button>
+            {/* Invitar Card - Available to most roles except visitors */}
+            {canInvite && (
+              <button className="menu-card" onClick={() => navigateTo('/visit')}>
+                <IonIcon icon={mailOutline} className="menu-card-icon" />
+                <span className="menu-card-label">Invitar</span>
+              </button>
+            )}
 
-            {/* Mis Invitaciones Card */}
-            <button className="menu-card" onClick={() => navigateTo('/invitations')}>
-              <IonIcon icon={listOutline} className="menu-card-icon" />
-              <span className="menu-card-label">Mis Invitaciones</span>
-            </button>
+            {/* Mis Invitaciones Card - Available to most roles except visitors */}
+            {canViewInvitations && (
+              <button className="menu-card" onClick={() => navigateTo('/invitations')}>
+                <IonIcon icon={listOutline} className="menu-card-icon" />
+                <span className="menu-card-label">Mis Invitaciones</span>
+              </button>
+            )}
           </div>
 
           {/* Footer */}

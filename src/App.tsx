@@ -38,7 +38,6 @@ import QRView from './pages/QRView';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import NewPassword from './pages/NewPassword';
-import Registrar from './pages/Registrar';
 import Visita from './pages/Visita';
 import CreateUser from './pages/CreateUser';
 import InvitationList from './pages/InvitationList';
@@ -53,7 +52,6 @@ const App: React.FC = () => {
           <ProtectedRoleRoute exact path='/home' component={Home} roles={["SAD", "ADM", "SUP", "USR", "VIS", "PRO", "OFC", "ENC", "RES"]} />
           <ProtectedRoleRoute exact path="/qr" component={QRView} roles={["SAD", "ADM", "SUP", "USR", "VIS", "PRO", "OFC", "ENC", "RES"]} />
           <ProtectedRoleRoute exact path="/modpass" component={NewPassword} roles={["SAD", "ADM", "SUP", "USR", "VIS", "PRO", "OFC", "ENC", "RES"]} />
-          <ProtectedRoleRoute exact path="/registry" component={Registrar} roles={["SAD", "ADM", "SUP", "PRO", "ENC"]} />
           <ProtectedRoleRoute exact path="/createuser" component={CreateUser} roles={["SAD", "ADM", "SUP", "PRO", "ENC"]} />
           <ProtectedRoleRoute exact path="/visit" component={Visita} roles={["SAD", "ADM", "SUP", "USR", "PRO", "ENC", "RES"]} />
           <ProtectedRoleRoute exact path="/invitations" component={InvitationList} roles={["SAD", "ADM", "SUP", "USR", "PRO", "ENC", "RES"]} />
