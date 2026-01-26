@@ -51,7 +51,7 @@ const App: React.FC = () => {
         <IonRouterOutlet>
           <ProtectedRoleRoute exact path='/home' component={Home} roles={["SAD", "ADM", "SUP", "USR", "VIS", "PRO", "OFC", "ENC", "RES"]} />
           <ProtectedRoleRoute exact path="/qr" component={QRView} roles={["SAD", "ADM", "SUP", "USR", "VIS", "PRO", "OFC", "ENC", "RES"]} />
-          <ProtectedRoleRoute exact path="/modpass" component={NewPassword} roles={["SAD", "ADM", "SUP", "USR", "VIS", "PRO", "OFC", "ENC", "RES"]} />
+          <Route exact path="/modpass" component={NewPassword} />
           <ProtectedRoleRoute exact path="/createuser" component={CreateUser} roles={["SAD", "ADM", "SUP", "PRO", "ENC"]} />
           <ProtectedRoleRoute exact path="/visit" component={Visita} roles={["SAD", "ADM", "SUP", "USR", "PRO", "ENC", "RES"]} />
           <ProtectedRoleRoute exact path="/invitations" component={InvitationList} roles={["SAD", "ADM", "SUP", "USR", "PRO", "ENC", "RES"]} />

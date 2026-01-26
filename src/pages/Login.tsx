@@ -102,7 +102,7 @@ const Login: React.FC = () => {
             
             <IonInput
               className="input-field"
-              placeholder="Nombre Completo"
+              placeholder="contraseña"
               type="password"
               {...loginForm.register("password")}
               autocomplete="off"
