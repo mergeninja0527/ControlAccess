@@ -32,8 +32,37 @@ const QRView: React.FC = () => {
   };
 
   const handleDownloadQR = () => {
-    showToast("Descargando QR...", "success");
-    // Implement QR download logic
+    if (!image || image === qrCodeImage) {
+      showToast("No hay QR disponible para descargar", "warning");
+      return;
+    }
+
+    try {
+      // Convert base64 to blob
+      const base64Data = image.replace(/^data:image\/\w+;base64,/, "");
+      const byteCharacters = atob(base64Data);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: 'image/png' });
+      const url = URL.createObjectURL(blob);
+
+      // Create a temporary link and download
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `qr-personal-${username || user || 'usuario'}-${moment().format('YYYYMMDD-HHmm')}.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+
+      showToast("QR descargado correctamente", "success");
+    } catch (error) {
+      console.error('[QRView] Error downloading QR:', error);
+      showToast("Error al descargar QR", "danger");
+    }
   };
 
   const getQRImage = async () => {

@@ -63,8 +63,18 @@ const NewPassword: React.FC = () => {
         return false;
       }
 
+      // Validate password length
+      if (password.length < 6) {
+        showToast("La contraseña debe tener al menos 6 caracteres", "warning");
+        return false;
+      }
+
       setLoading(true);
-      const response = await httpClient.patch('/auth/password', form.getValues());
+      const normalizedUser = user?.replace(/\./g, '') || '';
+      const response = await httpClient.patch('/auth/password', {
+        username: normalizedUser,
+        password: password
+      });
       if (response.status === 403) return showToast(response.data.message, "danger");
       
       showToast("Contraseña modificada con éxito", "success");

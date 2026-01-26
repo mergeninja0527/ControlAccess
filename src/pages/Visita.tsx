@@ -158,18 +158,107 @@ const Visita: React.FC = () => {
   };
 
   const handleShareWhatsApp = () => {
-    showToast("Compartir por WhatsApp", "success");
-    // Implement WhatsApp sharing logic
+    if (!generatedQR) {
+      showToast("No hay QR disponible para compartir", "warning");
+      return;
+    }
+
+    try {
+      // Convert base64 to blob
+      const base64Data = generatedQR.replace(/^data:image\/\w+;base64,/, "");
+      const byteCharacters = atob(base64Data);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: 'image/png' });
+      const url = URL.createObjectURL(blob);
+
+      // Create a temporary link and download
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `qr-invitacion-${invitationData?.nombre || 'invitacion'}.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+
+      // Open WhatsApp with message
+      const message = encodeURIComponent(
+        `Hola! Te invito a acceder. Presenta este código QR en la entrada.\n` +
+        `Válido hasta: ${invitationData?.fechaFin ? moment(invitationData.fechaFin).format('DD/MM/YYYY HH:mm') : ''}`
+      );
+      const whatsappUrl = `https://wa.me/?text=${message}`;
+      window.open(whatsappUrl, '_blank');
+      
+      showToast("QR compartido por WhatsApp", "success");
+    } catch (error) {
+      console.error('[Visita] Error sharing via WhatsApp:', error);
+      showToast("Error al compartir por WhatsApp", "danger");
+    }
   };
 
-  const handleShareEmail = () => {
-    showToast("Compartir por Email", "success");
-    // Implement email sharing logic
+  const handleShareEmail = async () => {
+    if (!generatedQR || !invitationData) {
+      showToast("No hay datos disponibles para compartir", "warning");
+      return;
+    }
+
+    try {
+      // Convert base64 to data URL for email
+      const subject = encodeURIComponent('Invitación de Acceso');
+      const body = encodeURIComponent(
+        `Hola,\n\n` +
+        `Has recibido una invitación de acceso.\n\n` +
+        `Nombre: ${invitationData.nombre}\n` +
+        `Válido hasta: ${moment(invitationData.fechaFin).format('DD/MM/YYYY HH:mm')}\n\n` +
+        `Presenta el código QR adjunto en la entrada.\n\n` +
+        `Saludos.`
+      );
+      
+      const mailtoUrl = `mailto:?subject=${subject}&body=${body}`;
+      window.location.href = mailtoUrl;
+      
+      showToast("Abriendo cliente de correo...", "success");
+    } catch (error) {
+      console.error('[Visita] Error sharing via email:', error);
+      showToast("Error al compartir por email", "danger");
+    }
   };
 
   const handleDownloadQR = () => {
-    showToast("Descargando QR...", "success");
-    // Implement QR download logic
+    if (!generatedQR) {
+      showToast("No hay QR disponible para descargar", "warning");
+      return;
+    }
+
+    try {
+      // Convert base64 to blob
+      const base64Data = generatedQR.replace(/^data:image\/\w+;base64,/, "");
+      const byteCharacters = atob(base64Data);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: 'image/png' });
+      const url = URL.createObjectURL(blob);
+
+      // Create a temporary link and download
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `qr-invitacion-${invitationData?.nombre || 'invitacion'}-${moment().format('YYYYMMDD')}.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+
+      showToast("QR descargado correctamente", "success");
+    } catch (error) {
+      console.error('[Visita] Error downloading QR:', error);
+      showToast("Error al descargar QR", "danger");
+    }
   };
 
   const keyDown = (e: React.KeyboardEvent<HTMLIonInputElement>) => {

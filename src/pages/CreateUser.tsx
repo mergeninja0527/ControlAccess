@@ -14,6 +14,7 @@ import {
 } from "@ionic/react";
 import { useRef, useState } from "react";
 import { formatearRut, handleRutDown, validarDigV } from "../../utils/RutFormatter";
+import { validateEmail, validateNombre, validateTelefono, validateRutFormat } from "../../utils/Validators";
 import { useForm } from "react-hook-form";
 import moment from "moment";
 import { arrowBack, calendarOutline, chevronDown } from "ionicons/icons";
@@ -58,67 +59,122 @@ const CreateUser: React.FC = () => {
   };
 
   const handleConfirm = async () => {
-    const { rut, telefono } = form.getValues();
+    const formValues = form.getValues();
+    const { rut, name, email, telefono, rol, nroUnidad } = formValues;
     
-    // Validate only if rut exists
-    if (rut) {
-      const tmp = rut.split("-");
-      let err = 0;
-      tmp[0] = tmp[0].replace(/\./g, '');
-      tmp[1] = tmp[1] === 'K' ? 'k' : tmp[1];
-      const digitoEsperado = validarDigV(tmp[0]);
-      const nameIn: Campos = {
-        rut: "Rut",
-        name: "Nombre Completo",
-        email: "Correo Electrónico",
-        telefono: "Teléfono"
-      };
+    // Validate all required fields are present
+    if (!rut || rut.trim() === '') {
+      return showToast("El RUT es requerido.", "warning");
+    }
+    
+    if (!name || name.trim() === '') {
+      return showToast("El nombre completo es requerido.", "warning");
+    }
+    
+    if (!email || email.trim() === '') {
+      return showToast("El correo electrónico es requerido.", "warning");
+    }
+    
+    if (!telefono || telefono.trim() === '') {
+      return showToast("El teléfono es requerido.", "warning");
+    }
+    
+    if (!rol) {
+      return showToast("El rol es requerido.", "warning");
+    }
+    
+    if (!nroUnidad) {
+      return showToast("La unidad es requerida.", "warning");
+    }
 
-      Object.keys(nameIn).every((key: string) => {
-        if (form.getValues(key) === "" || form.getValues(key) === undefined) {
-          const valorCampo: string = nameIn[key as keyof typeof nameIn];
-          err++;
-          showToast(`Campo debe estar completo: ${valorCampo}.`, "warning");
-          return false;
-        }
-        return true;
-      });
+    // Validate RUT format
+    const rutValidation = validateRutFormat(rut);
+    if (!rutValidation.valid) {
+      return showToast(rutValidation.message || "RUT inválido.", "warning");
+    }
 
-      if (err !== 0) return false;
+    // Validate RUT checksum
+    const tmp = rut.split("-");
+    tmp[0] = tmp[0].replace(/\./g, '');
+    tmp[1] = tmp[1] === 'K' ? 'k' : tmp[1];
+    const digitoEsperado = validarDigV(Number(tmp[0]));
+    if (String(digitoEsperado) !== tmp[1]) {
+      return showToast("RUT inválido. El dígito verificador no coincide.", "warning");
+    }
 
-      if (String(digitoEsperado) !== tmp[1]) {
-        return showToast("Rut inválido.", "warning");
-      }
+    // Validate email format
+    if (!validateEmail(email)) {
+      return showToast("Formato de correo electrónico inválido.", "warning");
+    }
 
-      if (telefono && telefono.length !== 9) {
-        return showToast("Número de teléfono inválido.", "warning");
-      }
+    // Validate nombre format
+    const nombreValidation = validateNombre(name);
+    if (!nombreValidation.valid) {
+      return showToast(nombreValidation.message || "Nombre inválido.", "warning");
+    }
 
-      if (!fechaInicio || fechaInicio === "") {
-        return showToast("Fecha de inicio inválida.", "warning");
-      }
+    // Validate telefono format
+    const telefonoValidation = validateTelefono(telefono);
+    if (!telefonoValidation.valid) {
+      return showToast(telefonoValidation.message || "Teléfono inválido.", "warning");
+    }
 
-      if (!fechaFin || fechaFin === "") {
-        return showToast("Fecha de término inválida.", "warning");
-      }
+    // Validate dates
+    if (!fechaInicio || fechaInicio === "") {
+      return showToast("Fecha de inicio inválida.", "warning");
+    }
 
-      try {
-        setLoading(true);
-        const fi = moment(fechaInicio).format("yyyy-MM-DD HH:mm:ss");
-        const ff = moment(fechaFin).format("yyyy-MM-DD HH:mm:ss");
-        const response = await httpClient.post('/mobile/createUser', { ...form.getValues(), fechaInicio: fi, fechaFin: ff });
-        if (response.status === 403) return showToast(response.data.message, "danger");
+    if (!fechaFin || fechaFin === "") {
+      return showToast("Fecha de término inválida.", "warning");
+    }
 
-        showToast("Usuario creado correctamente.", "success");
-        form.reset();
-        router.push('/home', 'back', 'pop');
-      } catch {
-        showToast("Ocurrió algún error al crear el usuario.", "danger");
-      } finally {
+    // Check if RUT already exists
+    try {
+      setLoading(true);
+      const normalizedRut = rut.replace(/\./g, '').trim();
+      const rutCheckResponse = await httpClient.post('/mobile/check-rut', { rut: normalizedRut });
+      
+      if (rutCheckResponse.data?.exists) {
         setLoading(false);
+        return showToast("El RUT ya está registrado.", "danger");
       }
-    } else {
-      showToast("Por favor complete todos los campos.", "warning");
+    } catch (error) {
+      console.error('[CreateUser] Error checking RUT:', error);
+      // Continue anyway - backend will also check
+    }
+
+    // Submit form
+    try {
+      const fi = moment(fechaInicio).format("yyyy-MM-DD HH:mm:ss");
+      const ff = moment(fechaFin).format("yyyy-MM-DD HH:mm:ss");
+      const normalizedRut = rut.replace(/\./g, '').trim();
+      
+      const response = await httpClient.post('/mobile/createUser', { 
+        rut: normalizedRut,
+        nombre: name.trim(),
+        correo: email.trim(),
+        telefono: telefono.trim(),
+        rol,
+        sala: nroUnidad,
+        fechaInicio: fi, 
+        fechaFin: ff 
+      });
+      
+      if (response.status === 403) {
+        return showToast(response.data?.message || "Error al crear el usuario.", "danger");
+      }
+
+      showToast("Usuario creado correctamente.", "success");
+      form.reset();
+      setTimeout(() => {
+        router.push('/home', 'back', 'pop');
+      }, 1000);
+    } catch (error: any) {
+      console.error('[CreateUser] Error:', error);
+      const errorMessage = error.response?.data?.message || "Ocurrió algún error al crear el usuario.";
+      showToast(errorMessage, "danger");
+    } finally {
+      setLoading(false);
     }
   };
 
