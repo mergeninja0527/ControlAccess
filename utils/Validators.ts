@@ -104,3 +104,13 @@ export const validateRutFormat = (rut: string): { valid: boolean; message?: stri
   
   return { valid: true };
 };
+
+/**
+ * Simplified RUT validation - only checks format, not checksum
+ * @param rut - RUT string to validate (e.g., "12345678-9" or "12.345.678-9")
+ * @returns Validation result with message
+ */
+export const validateRut = (rut: string): { valid: boolean; message?: string } => {
+  // Simply use format validation - no checksum required
+  return validateRutFormat(rut);
+};

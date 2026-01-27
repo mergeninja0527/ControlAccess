@@ -35,6 +35,7 @@
     "ionicons": "^7.4.0",
     "moment": "^2.30.1",
     "nodemailer": "^7.0.5",
+    "qrcode.react": "^4.2.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-hook-form": "^7.56.4",

@@ -227,7 +227,7 @@ const NewPassword: React.FC = () => {
             <div style={{ position: 'relative', width: '100%', marginBottom: '10px' }}>
               <IonInput 
                 className="newpassword-input-field"
-                placeholder="RUT"
+                placeholder="RUT (ej: 12.345.678-9)"
                 {...form.register("username", {
                   onChange: (e) => handleUsernameInput(e.target.value)
                 })} 

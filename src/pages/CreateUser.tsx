@@ -13,8 +13,8 @@ import {
   useIonToast 
 } from "@ionic/react";
 import { useRef, useState, useEffect } from "react";
-import { formatearRut, handleRutDown, validarDigV } from "../../utils/RutFormatter";
-import { validateEmail, validateNombre, validateTelefono, validateRutFormat } from "../../utils/Validators";
+import { formatearRut, handleRutDown } from "../../utils/RutFormatter";
+import { validateEmail, validateNombre, validateTelefono, validateRut } from "../../utils/Validators";
 import { useForm } from "react-hook-form";
 import moment from "moment";
 import { arrowBack, calendarOutline, chevronDown } from "ionicons/icons";
@@ -129,18 +129,9 @@ const CreateUser: React.FC = () => {
     }
 
     // Validate RUT format
-    const rutValidation = validateRutFormat(rut);
+    const rutValidation = validateRut(rut);
     if (!rutValidation.valid) {
       return showToast(rutValidation.message || "RUT inválido.", "warning");
-    }
-
-    // Validate RUT checksum
-    const tmp = rut.split("-");
-    tmp[0] = tmp[0].replace(/\./g, '');
-    tmp[1] = tmp[1] === 'K' ? 'k' : tmp[1];
-    const digitoEsperado = validarDigV(Number(tmp[0]));
-    if (String(digitoEsperado) !== tmp[1]) {
-      return showToast("RUT inválido. El dígito verificador no coincide.", "warning");
     }
 
     // Validate email format
@@ -259,7 +250,7 @@ const CreateUser: React.FC = () => {
               {/* Rut */}
               <IonInput
                 className="createuser-input"
-                placeholder="Rut"
+                placeholder="RUT (ej: 12.345.678-9)"
                 onKeyDown={handleRutDown}
                 {...form.register("rut", { 
                   onChange: (e) => { form.setValue('rut', formatearRut(e.target.value)) } 

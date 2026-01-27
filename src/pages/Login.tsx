@@ -6,6 +6,7 @@ import httpClient from '../../hooks/CapacitorClient';
 import { useAppDispatch } from '../../hooks/loginHooks';
 import { handleLoginSuccess } from '../../reducers/loginThunks';
 import { formatearRut } from '../../utils/RutFormatter';
+import { validateRut } from '../../utils/Validators';
 import logo from '../../assets/images/logo.png';
 
 const Login: React.FC = () => {
@@ -30,6 +31,12 @@ const Login: React.FC = () => {
     const formData = loginForm.getValues();
     console.log('[Login] Starting login attempt...');
     console.log('[Login] Form data:', JSON.stringify(formData));
+    
+    // Validate RUT format
+    const rutValidation = validateRut(formData.username);
+    if (!rutValidation.valid) {
+      return showToast(rutValidation.message || "RUT inválido.", "warning");
+    }
     
     try {
       setLoading(true);
@@ -91,7 +98,7 @@ const Login: React.FC = () => {
           <div className="form-section">
             <IonInput
               className="input-field"
-              placeholder="Rut"
+              placeholder="RUT (ej: 12.345.678-9)"
               {...loginForm.register("username", { 
                 onChange: (e) => { 
                   loginForm.setValue('username', formatearRut(e.target.value)) 

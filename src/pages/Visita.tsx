@@ -14,14 +14,14 @@ import {
   useIonToast 
 } from "@ionic/react";
 import { useRef, useState, useEffect } from "react";
-import { formatearRut, handleRutDown, validarDigV } from "../../utils/RutFormatter";
+import { formatearRut, handleRutDown } from "../../utils/RutFormatter";
 import { useForm } from "react-hook-form";
 import moment from "moment";
 import { arrowBack, calendarOutline, logoWhatsapp, mailOutline, downloadOutline, chevronDown } from "ionicons/icons";
 import { useAppSelector } from "../../hooks/loginHooks";
 import httpClient from "../../hooks/CapacitorClient";
-import { validateEmail, validateNombre, validateTelefono, validateRutFormat } from "../../utils/Validators";
-import qrCodeImage from '../../assets/images/QR_code.png';
+import { validateEmail, validateNombre, validateTelefono, validateRut } from "../../utils/Validators";
+import { QRCodeSVG } from 'qrcode.react';
 import '../../assets/Visita.css';
 
 interface Campos {
@@ -36,7 +36,7 @@ const Visita: React.FC = () => {
   const { user, unidades: unidadesFromRedux } = useAppSelector((state) => state.login);
   const [loading, setLoading] = useState<boolean>(false);
   const [currentStep, setCurrentStep] = useState<number>(1);
-  const [generatedQR, setGeneratedQR] = useState<string>('');
+  const [accessCode, setAccessCode] = useState<string>('');
   const [invitationData, setInvitationData] = useState<{nombre: string, fechaFin: string} | null>(null);
   const [unidades, setUnidades] = useState<Array<{value: number | string, label: string}>>([]);
   const form = useForm();
@@ -146,18 +146,9 @@ const Visita: React.FC = () => {
     }
 
     // Validate RUT format
-    const rutValidation = validateRutFormat(rut);
+    const rutValidation = validateRut(rut);
     if (!rutValidation.valid) {
       return showToast(rutValidation.message || "RUT inválido.", "warning");
-    }
-
-    // Validate RUT checksum
-    const tmp = rut.split("-");
-    tmp[0] = tmp[0].replace(/\./g, '');
-    tmp[1] = tmp[1] === 'K' ? 'k' : tmp[1];
-    const digitoEsperado = validarDigV(Number(tmp[0]));
-    if (String(digitoEsperado) !== tmp[1]) {
-      return showToast("RUT inválido. El dígito verificador no coincide.", "warning");
     }
 
     // Validate email format
@@ -245,16 +236,20 @@ const Visita: React.FC = () => {
         
         if (response.status === 403) return showToast(response.data?.message || 'Error', "danger");
 
-        if (response.data?.success && response.data?.data?.qrCode) {
-          setGeneratedQR(response.data.data.qrCode);
+        if (response.data?.success && response.data?.data?.idAcceso) {
+          // Set access code and invitation data first
+          setAccessCode(response.data.data.idAcceso);
           setInvitationData({
             nombre: name.trim(),
             fechaFin: ff
           });
+          
+          // Move to step 2 immediately - QR will render instantly
+          setCurrentStep(2);
+          showToast("Invitación generada correctamente.", "success");
+        } else {
+          showToast("Error al generar la invitación.", "danger");
         }
-
-      showToast("Invitación generada correctamente.", "success");
-      setCurrentStep(2);
     } catch (error: any) {
       console.error('[Visita] Error:', error);
       const errorMessage = error.response?.data?.message || "Ocurrió algún error al crear la invitación.";
@@ -264,15 +259,91 @@ const Visita: React.FC = () => {
     }
   };
 
-  const handleShareWhatsApp = () => {
-    if (!generatedQR) {
+  const qrCodeRef = useRef<HTMLDivElement>(null);
+
+  const generateQRAsImage = async (): Promise<string> => {
+    if (!accessCode) return Promise.resolve('');
+    
+    // Wait a tiny bit to ensure SVG is rendered (only if needed)
+    let svg = qrCodeRef.current?.querySelector('svg');
+    if (!svg) {
+      // Give it a moment to render
+      await new Promise(resolve => setTimeout(resolve, 50));
+      svg = qrCodeRef.current?.querySelector('svg');
+    }
+    
+    if (svg) {
+      return convertSVGToPNG(svg);
+    }
+    
+    // If still no SVG, generate directly (shouldn't happen normally)
+    return generateQRDirectly(accessCode);
+  };
+
+  const convertSVGToPNG = async (svg: SVGElement): Promise<string> => {
+    const svgData = new XMLSerializer().serializeToString(svg);
+    const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+    const url = URL.createObjectURL(svgBlob);
+    
+    const canvas = document.createElement('canvas');
+    const size = 512;
+    canvas.width = size;
+    canvas.height = size;
+    
+    const img = new Image();
+    const ctx = canvas.getContext('2d');
+    
+    try {
+      return await new Promise<string>((resolve, reject) => {
+        img.onload = () => {
+          if (ctx) {
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, size, size);
+            ctx.drawImage(img, 0, 0, size, size);
+            const dataUrl = canvas.toDataURL('image/png');
+            URL.revokeObjectURL(url);
+            resolve(dataUrl);
+          } else {
+            URL.revokeObjectURL(url);
+            reject(new Error('Could not get canvas context'));
+          }
+        };
+        img.onerror = () => {
+          URL.revokeObjectURL(url);
+          reject(new Error('Failed to load SVG'));
+        };
+        img.src = url;
+      });
+    } catch {
+      return '';
+    }
+  };
+
+  const generateQRDirectly = async (code: string): Promise<string> => {
+    // Fallback: create QR code SVG directly (should rarely be needed)
+    // Use a simpler approach - just return empty if QR component isn't available
+    // The QR should always be rendered in the UI before download/share is called
+    console.warn('[Visita] QR SVG not found, cannot generate image');
+    return '';
+  };
+
+  const handleShareWhatsApp = async () => {
+    if (!accessCode) {
       showToast("No hay QR disponible para compartir", "warning");
       return;
     }
 
     try {
+      // Generate QR code as image (no delay needed - QR is already rendered)
+      const qrImageData = await generateQRAsImage();
+      
+      if (!qrImageData) {
+        showToast("Error al generar QR", "danger");
+        return;
+      }
+
       // Convert base64 to blob
-      const base64Data = generatedQR.replace(/^data:image\/\w+;base64,/, "");
+      const base64Data = qrImageData.replace(/^data:image\/\w+;base64,/, "");
       const byteCharacters = atob(base64Data);
       const byteNumbers = new Array(byteCharacters.length);
       for (let i = 0; i < byteCharacters.length; i++) {
@@ -307,13 +378,20 @@ const Visita: React.FC = () => {
   };
 
   const handleShareEmail = async () => {
-    if (!generatedQR || !invitationData) {
+    if (!accessCode || !invitationData) {
       showToast("No hay datos disponibles para compartir", "warning");
       return;
     }
 
     try {
-      // Convert base64 to data URL for email
+      // Generate QR code as image (no delay needed - QR is already rendered)
+      const qrImageData = await generateQRAsImage();
+      
+      if (!qrImageData) {
+        showToast("Error al generar QR", "danger");
+        return;
+      }
+
       const subject = encodeURIComponent('Invitación de Acceso');
       const body = encodeURIComponent(
         `Hola,\n\n` +
@@ -334,15 +412,23 @@ const Visita: React.FC = () => {
     }
   };
 
-  const handleDownloadQR = () => {
-    if (!generatedQR) {
+  const handleDownloadQR = async () => {
+    if (!accessCode) {
       showToast("No hay QR disponible para descargar", "warning");
       return;
     }
 
     try {
+      // Generate QR code as image (no delay needed - QR is already rendered)
+      const qrImageData = await generateQRAsImage();
+      
+      if (!qrImageData) {
+        showToast("Error al generar QR", "danger");
+        return;
+      }
+
       // Convert base64 to blob
-      const base64Data = generatedQR.replace(/^data:image\/\w+;base64,/, "");
+      const base64Data = qrImageData.replace(/^data:image\/\w+;base64,/, "");
       const byteCharacters = atob(base64Data);
       const byteNumbers = new Array(byteCharacters.length);
       for (let i = 0; i < byteCharacters.length; i++) {
@@ -430,7 +516,7 @@ const Visita: React.FC = () => {
                 {/* Rut */}
                 <IonInput
                   className="visita-input"
-                  placeholder="Rut"
+                  placeholder="RUT (ej: 12.345.678-9)"
                   onKeyDown={handleRutDown}
                   {...form.register("rut", { 
                     onChange: (e) => { form.setValue('rut', formatearRut(e.target.value)) } 
@@ -574,8 +660,19 @@ const Visita: React.FC = () => {
             {currentStep === 2 && (
               <div className="qr-share-section">
                 {/* QR Code */}
-                <div className="qr-code-container">
-                  <img src={generatedQR || qrCodeImage} alt="QR Code" />
+                <div className="qr-code-container" ref={qrCodeRef}>
+                  {accessCode ? (
+                    <QRCodeSVG 
+                      value={accessCode} 
+                      size={256}
+                      level="M"
+                      includeMargin={true}
+                    />
+                  ) : (
+                    <div style={{ padding: '20px', textAlign: 'center' }}>
+                      Cargando QR...
+                    </div>
+                  )}
                 </div>
 
                 {/* Invitation Info */}
