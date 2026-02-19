@@ -1,8 +1,18 @@
 apply plugin: 'com.android.application'
 
 android {
-    namespace "io.ionic.starter"
+    namespace "com.controlacceso.app"
     compileSdk rootProject.ext.compileSdkVersion
+    
+    signingConfigs {
+        release {
+            storeFile file('release-key2.jks')
+            storePassword "123456"
+            keyAlias "release"
+            keyPassword "123456"
+        }
+    }
+    
     defaultConfig {
         applicationId "com.controlacceso.app"
         minSdkVersion rootProject.ext.minSdkVersion
@@ -20,6 +30,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
 }

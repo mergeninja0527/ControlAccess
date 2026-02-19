@@ -72,7 +72,7 @@ const QRView: React.FC = () => {
       setLoading(true);
       console.log('[QRView] Fetching personal access QR for user:', user);
 
-      const response = await httpClient.post('/mobile/obtainQR', { user });
+      const response = await httpClient.post('/obtainQR', { user });
 
       if (response.status === 403 || response.status === 400) {
         console.log('[QRView] Request failed:', response.status);
@@ -100,7 +100,7 @@ const QRView: React.FC = () => {
   };
 
   // Regenerate QR each time screen is opened; short refresh so token doesn't expire while viewing
-  const isAdmin = userrol === 1 || userrol === '1' || userrol === 'ADM' || userrol === 'SAD';
+  const isAdmin = userrol === '1' || userrol === 'ADM' || userrol === 'SAD';
   const refreshIntervalMs = isAdmin ? 60 * 1000 : 3 * 60 * 1000; // Admin: 1 min, others: 3 min
 
   useEffect(() => {

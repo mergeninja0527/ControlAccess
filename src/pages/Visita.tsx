@@ -65,7 +65,7 @@ const Visita: React.FC = () => {
       // Otherwise, fetch from API
       try {
         console.log('[Visita] Fetching unidades from API...');
-        const response = await httpClient.get('/mobile/unidades');
+        const response = await httpClient.get('/unidades');
         console.log('[Visita] Unidades API response:', response.data);
         
         if (response.data?.success && response.data?.data && response.data.data.length > 0) {
@@ -210,17 +210,30 @@ const Visita: React.FC = () => {
         if (response.status === 403) return showToast(response.data?.message || 'Error', "danger");
 
         if (response.data?.success && response.data?.data?.idAcceso) {
+          // Ensure idAcceso is a string (critical for QR code consistency)
+          const idAcceso = String(response.data.data.idAcceso).trim();
+          console.log('[Visita] Received idAcceso:', idAcceso, '| Type:', typeof idAcceso);
+          console.log('[Visita] QR code in response:', response.data.data.qrCode ? 'Present' : 'Missing');
+          
           // Set access code and invitation data first
-          setAccessCode(response.data.data.idAcceso);
+          setAccessCode(idAcceso);
           setInvitationData({
             nombre: name.trim(),
             fechaFin: ff
           });
           
+          // Verify QR code contains the same ID
+          if (response.data.data.qrCode) {
+            // QR code is base64 image, we can't easily verify the content here
+            // But we log the idAcceso that should be in the QR
+            console.log('[Visita] QR code should contain ID:', idAcceso);
+          }
+          
           // Move to step 2 immediately - QR will render instantly
           setCurrentStep(2);
           showToast("Invitación generada correctamente.", "success");
         } else {
+          console.error('[Visita] Invalid response:', response.data);
           showToast("Error al generar la invitación.", "danger");
         }
     } catch (error: any) {

@@ -62,7 +62,7 @@ const CreateUser: React.FC = () => {
       // Otherwise, fetch from API
       try {
         console.log('[CreateUser] Fetching unidades from API...');
-        const response = await httpClient.get('/mobile/unidades');
+        const response = await httpClient.get('/unidades');
         console.log('[CreateUser] Unidades API response:', response.data);
         
         if (response.data?.success && response.data?.data && response.data.data.length > 0) {
@@ -189,7 +189,7 @@ const CreateUser: React.FC = () => {
     try {
       setLoading(true);
       const normalizedRut = rut.replace(/\./g, '').trim();
-      const rutCheckResponse = await httpClient.post('/mobile/check-rut', { rut: normalizedRut });
+      const rutCheckResponse = await httpClient.post('/check-rut', { rut: normalizedRut });
       
       if (rutCheckResponse.data?.exists) {
         setLoading(false);
@@ -206,7 +206,7 @@ const CreateUser: React.FC = () => {
       const ff = moment(fechaFin).format("YYYY-MM-DD HH:mm:ss");
       const normalizedRut = rut.replace(/\./g, '').trim();
       
-      const response = await httpClient.post('/mobile/createUser', { 
+      const response = await httpClient.post('/createUser', { 
         rut: normalizedRut,
         nombre: name.trim(),
         correo: email.trim(),

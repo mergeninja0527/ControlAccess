@@ -46,7 +46,7 @@ const Login: React.FC = () => {
 
     try {
       setLoading(true);
-      const response = await httpClient.post('/mobile/auth/login', formData);
+      const response = await httpClient.post('/login', formData);
 
       console.log('[Login] Response received:', JSON.stringify(response));
       console.log('[Login] Response status:', response.status);
